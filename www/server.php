@@ -1,14 +1,14 @@
-<?php 
+<?php
 	session_start();
 
 	// declaración de variable
 	$username = "";
 	$email    = "";
-	$errors = array(); 
+	$errors = array();
 	$_SESSION['success'] = "";
 
-	// conectarse a la base de datos
-	$db = mysqli_connect('localhost', 'root', '', 'control_domotico');
+	// conectarse a la base de datos ('localhost','root','','control_domotico')
+	$db = mysqli_connect('db', 'user', 'test', 'myDb');
 
 	// REGISTRO DE USUARIO
 	if (isset($_POST['reg_user'])) {
@@ -20,8 +20,8 @@
 		$cod_registro = mysqli_real_escape_string($db, $_POST['cod_registro']);
 
 		// validación de formularios: asegúrese de que el formulario esté correctamente rellenado
-		if (empty($username)) { 
-			array_push($errors, "Se requiere nombre de usuario"); 
+		if (empty($username)) {
+			array_push($errors, "Se requiere nombre de usuario");
 		}
 		// verificar si el usuario existe
 		$cola1 = "SELECT * FROM users WHERE username='$username'";
@@ -30,8 +30,8 @@
 			array_push($errors, "El nombre de usuario ya existe");
 		}
 
-		if (empty($email)) { 
-			array_push($errors, "Se requiere correo electronico"); 
+		if (empty($email)) {
+			array_push($errors, "Se requiere correo electronico");
 		}
 		// verificar si el correo existe
 		$cola2 = "SELECT * FROM users WHERE email='$email'";
@@ -40,8 +40,8 @@
 			array_push($errors, "El correo electronico ya existe");
 		}
 
-		if (empty($password_1)) { 
-			array_push($errors, "Se requiere contraseña"); 
+		if (empty($password_1)) {
+			array_push($errors, "Se requiere contraseña");
 		}
 
 		if ($password_1 != $password_2) {
@@ -67,7 +67,7 @@
 		// registrar usuario si no hay errores en el formulario
 		if (count($errors) == 0) {
 			$password = md5($password_1); //cifra la contraseña antes de guardarla en la base de datos
-			$query = "INSERT INTO users (username, email, password) 
+			$query = "INSERT INTO users (username, email, password)
 					  VALUES('$username', '$email', '$password')";
 			mysqli_query($db, $query);
 
@@ -106,5 +106,4 @@
 			}
 		}
 	}
-
 ?>
